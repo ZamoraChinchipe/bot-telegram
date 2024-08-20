@@ -1,11 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=Y, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Gallery</title>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js"></script>
+  <script>
+    // Configura Firebase
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
 </head>
 <body>
-    
+  <h1>Photo Gallery</h1>
+  <div id="photo-gallery"></div>
+  <script>
+    const db = firebase.firestore();
+    const gallery = document.getElementById('photo-gallery');
+
+    db.collection('alarm_photos').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
+      gallery.innerHTML = '';
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const img = document.createElement('img');
+        img.src = data.url;
+        img.alt = 'Alarm Photo';
+        img.style.width = '200px';  // Ajusta el tamaño según tus necesidades
+        gallery.appendChild(img);
+      });
+    });
+  </script>
 </body>
 </html>
